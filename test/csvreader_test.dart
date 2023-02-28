@@ -1,5 +1,5 @@
 import 'package:csvloader/csvloader.dart';
-import 'package:csvloader/src/helpers.dart';
+import 'package:csvloader/src/_helpers.dart';
 import 'package:test/test.dart';
 
 import 'streamers.dart';
@@ -7,13 +7,13 @@ import 'streamers.dart';
 final settingsHeaders = ['Section', 'Setting', 'Value', 'Comment'];
 
 final settings = [
-  ['Server', 'HTTP Port', null, 'Unencrypted channel'],
-  ['Server', 'HTTPS Port', 443, 'Encrypted channel'],
+  ['Server', 'HTTP Port', '', 'Unencrypted channel'],
+  ['Server', 'HTTPS Port', '443', 'Encrypted channel'],
   ['Server', 'User', 'admin', 'Process user'],
   ['Database', 'ConnectionString', 'db=DB_NAME;user=reader;pwd=***', ''],
   ['Environment', 'Type', 'QA', 'Environment type'],
-  ['Environment', 'Password', null, null],
-  ['Environment', 'OS', null, 'Operating system'],
+  ['Environment', 'Password', '', ''],
+  ['Environment', 'OS', '', 'Operating system'],
 ];
 
 Stream<String> _characters(Stream<String> input) => chunks(input, 1);
@@ -56,7 +56,7 @@ void main() {
   });
 }
 
-void runTests(List<List> data,
+void runTests(List<List<String>> data,
     {List<String>? headers,
     Stream<String> Function(Stream<String> input)? transformation}) {
   test('default', () async {
@@ -116,7 +116,7 @@ void runTests(List<List> data,
 
   test('last cell empty', () async {
     final lastRow = data.last.toList();
-    lastRow[lastRow.length - 1] = null;
+    lastRow[lastRow.length - 1] = '';
     final withEmptyLastCell = data.followedBy([lastRow]).toList();
     await runTest(withEmptyLastCell,
         headers: headers, transformation: transformation);
@@ -127,7 +127,7 @@ void runTests(List<List> data,
   test('last row empty', () async {
     final row = data.last.toList();
     for (var i = 0; i < row.length; i++) {
-      row[i] = null;
+      row[i] = '';
     }
     final dataWithEmptyRows = [row, ...data.take(2), row, ...data.skip(2), row];
     await runTest(dataWithEmptyRows,
@@ -171,8 +171,8 @@ void runTests(List<List> data,
   test('rows with same header', () async {
     final dupHeaders = ['#Line', 'Value', 'Value', 'Value'];
     final dupData = [
-      ['#1', 1, 2, 3],
-      ['#2', 3, 4, 5],
+      ['#1', '1', '2', '3'],
+      ['#2', '3', '4', '5'],
     ];
     await runTest(dupData, headers: dupHeaders, transformation: transformation);
     await runTest(dupData,
@@ -182,7 +182,7 @@ void runTests(List<List> data,
   });
 }
 
-Future runTest(List<List> data,
+Future runTest(List<List<String>> data,
     {List<String>? headers,
     String separator = ',',
     String endOfLine = '\r\n',
@@ -203,12 +203,12 @@ Future runTest(List<List> data,
           separator: separator, endOfLine: endOfLine);
   List<String>? head;
   final headIdx = <String, List<int>>{};
-  final rows = <List>[];
+  final rows = <List<String>>[];
   await for (var row in csv.rows) {
     if (headers != null && head == null) {
       expect(csv.headers, equals(headers));
       expect(row.headers, equals(headers));
-      head = csv.headers!.toList();
+      head = csv.headers.toList();
       for (var i = 0; i < head.length; i++) {
         final idx = headIdx.putIfAbsent(head[i], () => []);
         idx.add(i);
@@ -244,6 +244,6 @@ Future runTest(List<List> data,
 
   expect(rows.length, equals(rowsWithData.length));
   for (var i = 0; i < rowsWithData.length; i++) {
-    expect(rows[i], equals(rowsWithData[i].map((v) => v?.toString() ?? '')));
+    expect(rows[i], equals(rowsWithData[i]));
   }
 }

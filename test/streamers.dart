@@ -1,4 +1,4 @@
-Stream<String> csvStream(List<List> data,
+Stream<String> csvStream(List<List<String>> data,
     {List<String>? headers,
     String separator = ',',
     String endOfLine = '\r\n',
@@ -6,7 +6,13 @@ Stream<String> csvStream(List<List> data,
   if (headers != null) {
     for (var i = 0; i < headers.length; i++) {
       if (i > 0) yield separator;
-      yield headers[i];
+      var header = headers[i];
+      if (header.contains('"') ||
+          header.contains(separator) ||
+          header.contains(endOfLine)) {
+        header = '"${header.replaceAll('"', '""')}"';
+      }
+      yield header;
     }
     if (data.isNotEmpty || withFinalEol) {
       yield endOfLine;
@@ -16,11 +22,11 @@ Stream<String> csvStream(List<List> data,
     final row = data[i];
     for (var j = 0; j < row.length; j++) {
       if (j > 0) yield separator;
-      var value = row[j]?.toString() ?? '';
+      var value = row[j];
       if (value.contains('"') ||
           value.contains(separator) ||
           value.contains(endOfLine)) {
-        value = '"' + value.replaceAll('"', '""') + '"';
+        value = '"${value.replaceAll('"', '""')}"';
       }
       yield value;
     }

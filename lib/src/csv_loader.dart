@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'csv_data.dart';
-import 'csv_processor.dart';
+import '_csv_processor.dart';
 
 /// [CsvLoader] wraps around a [Stream] and enables reading data in CSV format. Consumers of CSV data
 /// can use the [rows] stream to receive each line as a [CsvData] object.
@@ -51,8 +51,8 @@ class CsvLoader {
 
   /// List of headers found in the first non-empty line of the CSV data source. This list is populated
   /// if the reader was constructed with [CsvLoader.withHeaders]; otherwise it is empty.
-  Iterable<String>? get headers => _processor.headers;
+  Iterable<String> get headers => _processor.headers;
 
-  /// Stream of [CsvData]; if the original CSV data source contains empty lines, they are ignored.
+  /// Stream of [CsvData]; empty rows from the CSV data source are ignored.
   Stream<CsvData> get rows => _processor.stream;
 }

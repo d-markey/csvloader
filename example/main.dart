@@ -24,7 +24,7 @@ Future readNumbers() async {
   final props = <String>[];
 
   await for (var row in numbersCsv.rows) {
-    final n = num.parse(row['Number']);
+    final n = num.parse(row['Number'] ?? '');
     final odd = (row['Odd?'] == 'true');
     final even = (row['Even?'] == 'true');
     final square = (row['Square?'] == 'true');
@@ -58,13 +58,17 @@ Stream<String> families() async* {
   yield 'Name,First name,Father name,First name,Mother name,First name\r\n';
   // CsvLoader ignores empty lines
   yield '\r\n';
+  yield ' \r\n';
+  yield ',,,,\r\n';
+  yield ' , , , , \r\n';
+  yield ',\t,\t,\t,\r\n';
   yield 'Doe,Jeffrey,Doe,John,Smith,Ann\r\n';
   yield 'Doe,Martin,Doe,John,Smith,Ann\r\n';
   yield 'Doe,Mary Ann,Doe,John,Smith,Ann\r\n';
   yield '\r\n';
-  yield 'Fergusson,Jack,Fergusson,Robert,Smith,Ann\r\n';
-  yield '\r\n';
   yield 'Doe,Jerry,Doe,John,Jones,Jennifer\r\n';
+  yield '\r\n';
+  yield 'Fergusson,Jack,Fergusson,Robert,Smith,Ann\r\n';
   yield '\r\n';
 }
 
@@ -100,11 +104,11 @@ Future readFamilies() async {
 
 Stream<String> catalog() async* {
   // CsvLoader will unescape data between quotes
-  yield 'Part code\tPart label\tDescription\r\n';
-  yield 'B1XX\tBolt\t"Your average bolt"\r\n';
-  yield 'S2XX\tScrew\t"Your average screw"\r\n';
-  yield 'N1XX\tNut\t"Nut; for bolts ""B1XX"""\r\n';
-  yield '9N\tNail\t"A 9"" nail"\r\n';
+  yield 'Part code\tPart label\tDescription\r\nB1XX\tBolt\t"Your ';
+  yield 'average bolt"\r\nS2XX\tScrew\t"Your average screw"\r';
+  yield '\nN1XX\tNut\t"Nut; for bolts ""B1X';
+  yield 'X"""\r\n9N\tNail\t"A 9"';
+  yield '" nail"\r\n';
 }
 
 Future readCatalog() async {
