@@ -1,6 +1,6 @@
 name: csvloader
 description: Simple, cross-platform Dart class to read  CSV data from a `Stream`. Supports and extends RFC 4180.
-version: 1.1.0
+version: 1.2.0
 homepage: https://github.com/d-markey/csvloader
 
 environment:
