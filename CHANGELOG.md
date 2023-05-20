@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Enable support of Dart 3.
+
 ## 1.1.0
 
 - Add proper support for errors from the source `Stream`. Errors are forwarded to the output stream of `CsvData`.
