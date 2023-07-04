@@ -2,6 +2,8 @@
 
 Lightweight, cross-platform Dart package to read CSV data from a `Stream`. Supports and extends RFC 4180.
 
+[![codecov](https://codecov.io/github/d-markey/csvloader/branch/main/graph/badge.svg?token=9NBGYNW423)](https://codecov.io/github/d-markey/csvloader)
+
 # Usage
 
 ```dart
