@@ -29,5 +29,4 @@ void main() async {
     print(' - $label ($code): $descr');
   }
 }
-}
 ```
