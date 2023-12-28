@@ -8,7 +8,7 @@ import '_csv_processor.dart';
 ///
 /// Example:
 /// ```dart
-/// var csv = CsvLoader.withHeaders(myStream);`
+/// var csv = CsvLoader.withHeaders(myStream);
 /// await for (var row in csv.rows) {
 ///   // do something with the row
 /// }
